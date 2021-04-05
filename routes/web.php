@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\XmlUploadController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('xmlupload');
 });
+Route::post("/xmlupload", [XmlUploadController::class, "uploadfile"])->name("xmlupload");
 
 
 Route::group(['prefix' => 'admin'], function () {
