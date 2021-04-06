@@ -15,9 +15,9 @@ class CreateOstatkiSchetKontragentTable extends Migration
     {
         Schema::create('ostatki_schet_kontragent', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("id_schet");
+            $table->unsignedBigInteger("id_schet")->nullable();
             $table->foreign("id_schet")->references("id")->on("raschshet_kontragent");
-            $table->unsignedBigInteger("id_kontragent");
+            $table->unsignedBigInteger("id_kontragent")->nullable();
             $table->foreign("id_kontragent")->references("id")->on("kontragent");
             $table->string("RasChschet", 50); 
             $table->date("DataSozdaniya_vipiska"); 

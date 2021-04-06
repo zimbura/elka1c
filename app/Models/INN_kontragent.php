@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Kontragent extends Model
+class INN_kontragent extends Model
 {
     use HasFactory;
-    protected $table = "kontragent";
+    protected $table = "inn_kontragent";
     public $timestamps = false;
-    public function INNs() {
-        return $this->hasMany(INN_kontragent::class, "id_kontragent");
+
+    public function kontragent() {
+        return $this->belongsTo(Kontragent::class, "id_kontragent");
     }
 }

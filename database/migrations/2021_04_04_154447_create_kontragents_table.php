@@ -17,11 +17,11 @@ class CreateKontragentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger("id_user")->nullable();
             $table->foreign("id_user")->references("id")->on("users");
-            $table->string("tel_kontragent");
-            $table->string("email_kontragent");
+            $table->string("tel_kontragent")->nullable();
+            $table->string("email_kontragent")->nullable();
             $table->string("name_kontragent");
-            $table->string("forma_kontragent");
-            $table->string("nalog_kontragent");
+            $table->string("forma_kontragent")->nullable();
+            $table->string("nalog_kontragent")->nullable();
         });
     }
 
