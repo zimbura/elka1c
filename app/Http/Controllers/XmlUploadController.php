@@ -33,6 +33,8 @@ class XmlUploadController extends Controller
         $header = $this->getDocumentHeader($filestring);
         $body = $this->getDocumentBody($filestring);
         $raschet = $this->getDocumentRaschet($filestring);
+
+        
     }
 
     /*

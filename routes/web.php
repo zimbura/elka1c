@@ -18,8 +18,3 @@ Route::get('/', function () {
     return view('xmlupload');
 });
 Route::post("/xmlupload", [XmlUploadController::class, "uploadfile"])->name("xmlupload");
-
-
-Route::group(['prefix' => 'admin'], function () {
-    Voyager::routes();
-});
