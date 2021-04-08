@@ -19,20 +19,20 @@ class CreateOstatkiSchetKontragentTable extends Migration
             $table->foreign("id_schet")->references("id")->on("raschshet_kontragent");
             $table->unsignedBigInteger("id_kontragent")->nullable();
             $table->foreign("id_kontragent")->references("id")->on("kontragent");
-            $table->string("RasChschet", 50); 
-            $table->date("DataSozdaniya_vipiska"); 
-            $table->time("Vremyasozdaniya"); 
-            $table->date("DataNachala"); 
-            $table->date("DataKontsa"); 
-            $table->double("NachalnyOstatok", 100); 
-            $table->double("VsegoPostupilo", 100); 
-            $table->double("VsegoSpisano", 100); 
-            $table->double("KonechniyOstatok", 100); 
-            $table->string("VersiyaFormata", 25);
-            $table->string("VsegoSektsijVDokumente", 25); 
-            $table->string("ZagruzhenoSektsij", 25); 
-            $table->string("NazvanieFajla", 250); 
-            $table->datetime("DataObrabotkiFajla"); 
+            $table->string("RasChschet", 50)->nullable();
+            $table->date("DataSozdaniya_vipiska")->nullable();
+            $table->time("Vremyasozdaniya")->nullable();
+            $table->date("DataNachala")->nullable();
+            $table->date("DataKontsa")->nullable();
+            $table->double("NachalnyOstatok", 100)->nullable();
+            $table->double("VsegoPostupilo", 100)->nullable();
+            $table->double("VsegoSpisano", 100)->nullable();
+            $table->double("KonechniyOstatok", 100)->nullable();
+            $table->string("VersiyaFormata", 25)->nullable();
+            $table->string("VsegoSektsijVDokumente", 25)->nullable();
+            $table->string("ZagruzhenoSektsij", 25)->nullable();
+            $table->string("NazvanieFajla", 250)->nullable();
+            $table->datetime("DataObrabotkiFajla")->nullable();
         });
     }
 

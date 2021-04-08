@@ -6,6 +6,7 @@ use App\Models\INN_kontragent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Kontragent;
+use App\Models\OstatkiOtchetKontragent;
 use App\Models\PlategVipiskaAll;
 
 class XmlUploadController extends Controller
@@ -37,7 +38,7 @@ class XmlUploadController extends Controller
         $header = $this->getDocumentHeader($filestring);
         $body = $this->getDocumentBody($filestring);
         $raschet = $this->getDocumentRaschet($filestring);
-        $date = date('d/m/Y h:i:s a');
+        $date = date('Y-m-d h:i:s');
         $this->uploadDocumentDataToDB($header, $body, $raschet, $fileName, $date);
     }
 
@@ -111,6 +112,8 @@ class XmlUploadController extends Controller
 
     private function uploadDocumentDataToDB($header, $body, $raschet, $fileName, $date)
     {
+        // Загружено секций документа
+        $uploaded = 0;
         // Структура файла не позволяет сделать иначе, работаем с блоками одинакого кода но разным функционалом
         // Есть возможность передавать истанции класса в функции и делать с этим что-то
         // Но это может привести к дальнейшим проблемам с отладкой, поэтому делается так
@@ -229,7 +232,43 @@ class XmlUploadController extends Controller
                 $plateg_vipska->PokazatelTipa = $elem["ПоказательТипа"] ?? NULL;
                 $plateg_vipska->NazvanieFajla = $fileName;
                 $plateg_vipska->save();
+                $uploaded++;
             }
         }
+        $raschet = $raschet[0];
+        $ostatkiSchet = new OstatkiOtchetKontragent;
+        $ostatkiSchet->RasChschet = $raschet["РасчСчет"] ?? NULL;
+        $new_date = explode(".", $raschet["ДатаСозданияВыписка"] ?? NULL);
+        if (count($new_date) > 1) {
+            $new_date = "{$new_date[2]}-{$new_date[1]}-{$new_date[0]}";
+        } else {
+            $new_date = NULL;
+        }
+        $ostatkiSchet->DataSozdaniya_vipiska = $new_date ?? NULL;
+        $ostatkiSchet->Vremyasozdaniya = $raschet["ВремяСоздания"] ?? NULL;
+        $new_date = explode(".", $raschet["ДатаНачала"] ?? NULL);
+        if (count($new_date) > 1) {
+            $new_date = "{$new_date[2]}-{$new_date[1]}-{$new_date[0]}";
+        } else {
+            $new_date = NULL;
+        }
+        $ostatkiSchet->DataNachala = $new_date ?? NULL;
+        $new_date = explode(".", $raschet["ДатаКонца"] ?? NULL);
+        if (count($new_date) > 1) {
+            $new_date = "{$new_date[2]}-{$new_date[1]}-{$new_date[0]}";
+        } else {
+            $new_date = NULL;
+        }
+        $ostatkiSchet->DataKontsa = $raschet["ДатаКонца"] ?? NULL;
+        $ostatkiSchet->NachalnyOstatok = $raschet["НачальныйОстаток"] ?? NULL;
+        $ostatkiSchet->VsegoPostupilo = $raschet["ВсегоПоступило"] ?? NULL;
+        $ostatkiSchet->VsegoSpisano = $raschet["ВсегоСписано"] ?? NULL;
+        $ostatkiSchet->KonechniyOstatok = $raschet["КонечныйОстаток"] ?? NULL;
+        $ostatkiSchet->VersiyaFormata = $header["ВерсияФормата"] ?? NULL;
+        $ostatkiSchet->VsegoSektsijVDokumente = count($body);
+        $ostatkiSchet->ZagruzhenoSektsij = $uploaded;
+        $ostatkiSchet->NazvanieFajla = $fileName ?? NULL;
+        $ostatkiSchet->DataObrabotkiFajla = $date ?? NULL;
+        $ostatkiSchet->save();
     }
 }
