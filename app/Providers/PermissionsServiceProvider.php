@@ -41,11 +41,11 @@ class PermissionsServiceProvider extends ServiceProvider
         //      Это видит только директор
         // @endrole
         Blade::directive('role', function ($role) {
-            return "if(auth()->check() && auth()->user()->hasRole({$role})) :";
+            return "<?php if ( auth()->check() && auth()->user()->hasRole($role) ) { ?>";
         });
 
         Blade::directive('endrole', function ($role) {
-            return "endif;"; 
+            return "<?php } ?>";
         });
     }
 }

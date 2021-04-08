@@ -8,8 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 use App\Permissions\HasPermissionsTrait;
+use Illuminate\Database\Eloquent\Model;
 
-class User
+class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasPermissionsTrait;
 

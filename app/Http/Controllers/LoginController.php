@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -13,7 +12,7 @@ class LoginController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function authenticate(Request $request)
+    public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
@@ -24,7 +23,7 @@ class LoginController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Данные не верны.',
+            'email' => 'The provided credentials do not match our records.',
         ]);
     }
 }

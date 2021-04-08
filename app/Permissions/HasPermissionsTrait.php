@@ -12,7 +12,6 @@ trait HasPermissionsTrait
     public function givePermissionsTo(...$permissions)
     {
         $permissions = $this->getAllPermissions($permissions);
-        dd($permissions);
         if ($permissions === null) {
             return $this;
         }
@@ -56,7 +55,6 @@ trait HasPermissionsTrait
     // Иначе возвращает false
     public function hasRole(...$roles)
     {
-
         foreach ($roles as $role) {
             if ($this->roles->contains('slug', $role)) {
                 return true;

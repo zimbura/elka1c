@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\RolesController;
 use App\Http\Controllers\XmlUploadController;
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +17,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('xmlupload');
-});
+Route::get('/', [IndexController::class, "index"]);
 Route::post("/xmlupload", [XmlUploadController::class, "uploadfile"])->name("xmlupload");
+Route::post("/login", [LoginController::class, "login"])->name("login");
+Route::post("/changeRoles/{id}", [RolesController::class, "changeRoles"])->name("changerole");
+

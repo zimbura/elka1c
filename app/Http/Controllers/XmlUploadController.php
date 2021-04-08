@@ -115,10 +115,17 @@ class XmlUploadController extends Controller
         // Есть возможность передавать истанции класса в функции и делать с этим что-то
         // Но это может привести к дальнейшим проблемам с отладкой, поэтому делается так
         foreach ($body as $elem) {
-            $kontragent = Kontragent::where("name_kontragent", "=", $elem["Плательщик1"])->first();
+            if ($header["ВерсияФормата"] == "1.01") {
+                $senderIndex = "Плательщик";
+                $recieverIndex = "Получатель";
+            } else {
+                $senderIndex = "Плательщик1";
+                $recieverIndex = "Получатель1";
+            }
+            $kontragent = Kontragent::where("name_kontragent", "=", $elem[$senderIndex])->first();
             if ($kontragent === null) {
                 $kontragent = new Kontragent;
-                $kontragent->name_kontragent = $elem["Плательщик1"];
+                $kontragent->name_kontragent = $elem[$senderIndex];
                 $kontragent->save();
             }
             $schet = $kontragent->INNs->where("inn_kontragent", "=", $elem["ПлательщикИНН"])->first();
@@ -127,10 +134,10 @@ class XmlUploadController extends Controller
                 $schet->inn_kontragent = $elem["ПлательщикИНН"];
                 $kontragent->INNs()->save($schet);
             }
-            $kontragent = Kontragent::where("name_kontragent", "=", $elem["Получатель1"])->first();
+            $kontragent = Kontragent::where("name_kontragent", "=", $elem[$recieverIndex])->first();
             if ($kontragent === null) {
                 $kontragent = new Kontragent;
-                $kontragent->name_kontragent = $elem["Получатель1"];
+                $kontragent->name_kontragent = $elem[$recieverIndex];
                 $kontragent->save();
             }
             $schet = $kontragent->INNs->where("inn_kontragent", "=", $elem["ПолучательИНН"])->first();
@@ -140,7 +147,7 @@ class XmlUploadController extends Controller
                 $kontragent->INNs()->save($schet);
             }
 
-            $compareDate = explode(".",$elem["Дата"]);
+            $compareDate = explode(".", $elem["Дата"]);
             $compareDate = "{$compareDate[2]}-{$compareDate[1]}-{$compareDate[0]}";
 
             $plateg_vipska = PlategVipiskaAll::where("Nomer", "=", $elem["Номер"])
@@ -160,12 +167,12 @@ class XmlUploadController extends Controller
                 $plateg_vipska->UnikalnyjMD5platezha = md5(uniqid(rand(), true));
                 $plateg_vipska->SektsiyaDocumenta = $elem["СекцияДокумент"] ?? NULL;
                 $plateg_vipska->Nomer = $elem["Номер"] ?? NULL;
-                $new_date = explode(".",$elem["Дата"]);
+                $new_date = explode(".", $elem["Дата"] ?? NULL);
                 $new_date = "{$new_date[2]}-{$new_date[1]}-{$new_date[0]}";
                 $plateg_vipska->Data = $new_date ?? NULL;
                 $plateg_vipska->Summa = $elem["Сумма"] ?? NULL;
                 $plateg_vipska->PlatelshikSchet = $elem["ПлательщикСчет"] ?? NULL;
-                $new_date = explode(".",$elem["ДатаСписано"]);
+                $new_date = explode(".", $elem["ДатаСписано"] ?? NULL);
                 if (count($new_date) > 1) {
                     $new_date = "{$new_date[2]}-{$new_date[1]}-{$new_date[0]}";
                 } else {
@@ -182,7 +189,7 @@ class XmlUploadController extends Controller
                 $plateg_vipska->PlatelshchickBIK = $elem["ПлательщикБИК"] ?? NULL;
                 $plateg_vipska->PlatelshchickKorschet = $elem["ПлательщикКорсчет"] ?? NULL;
                 $plateg_vipska->PoluchatelSchet = $elem["ПолучательСчет"] ?? NULL;
-                $new_date = explode(".",$elem["ДатаПоступило"]);
+                $new_date = explode(".", $elem["ДатаПоступило"] ?? NULL);
                 if (count($new_date) > 1) {
                     $new_date = "{$new_date[2]}-{$new_date[1]}-{$new_date[0]}";
                 } else {
@@ -222,7 +229,6 @@ class XmlUploadController extends Controller
                 $plateg_vipska->PokazatelTipa = $elem["ПоказательТипа"] ?? NULL;
                 $plateg_vipska->NazvanieFajla = $fileName;
                 $plateg_vipska->save();
-                
             }
         }
     }
