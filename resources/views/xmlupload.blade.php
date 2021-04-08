@@ -13,6 +13,7 @@
 
 </html>
 {{-- Форма загрузки файла, в дальнейшем будет перемещена в нужную часть фронта --}}
+<H2>Загрузка данных</H2>
 <form action="{{ route('xmlupload') }}" method="post" enctype="multipart/form-data">
     @csrf
     <input type="file" name="file" id="xmlfile">
@@ -35,7 +36,24 @@
     <input type="password" name="password" placeholder="Пароль">
     <button type="submit">Войти</button>
 </form>
-
+<div>
+    Данные для входа
+    <h2>Админ</h2>
+    <div>
+        Логин: admin@admin.ru
+        Пароль: admin
+    </div>
+    <h2>Пользователь</h2>
+    <div>
+        Логин: user@user.ru
+        Пароль: user
+    </div>
+    <h2>Директор</h2>
+    <div>
+        Логин: director@director.ru
+        Пароль: director
+    </div>
+</div>
 @role("admin")
 <h1>Вы админ</h1>
 @foreach ($users as $user)
