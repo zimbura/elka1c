@@ -40,12 +40,8 @@ class PermissionsServiceProvider extends ServiceProvider
         // @role("director")
         //      Это видит только директор
         // @endrole
-        Blade::directive('role', function ($role) {
-            return "<?php if ( auth()->check() && auth()->user()->hasRole($role) ) { ?>";
-        });
-
-        Blade::directive('endrole', function ($role) {
-            return "<?php } ?>";
+        Blade::if('role', function ($role) {
+            return auth()->check() && auth()->user()->hasRole($role);
         });
     }
 }

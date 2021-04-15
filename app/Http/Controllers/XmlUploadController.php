@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Kontragent;
 use App\Models\OstatkiOtchetKontragent;
+use App\Models\PlategLinc;
 use App\Models\PlategVipiskaAll;
 
 class XmlUploadController extends Controller
@@ -70,8 +71,8 @@ class XmlUploadController extends Controller
         $header = [];
         // Регекс получает все данные до первой секции РасчСчета
         // Данный код подразумевает наличие хотя бы одной секции РасчСчета
-        preg_match_all("/(^.*)СекцияРасчСчет/s", $filestring, $header);
-        $header = $this->parseAssocData($header[1][0]);
+        preg_match_all("/.+?(?=СекцияРасчСчет)/s", $filestring, $header);
+        $header = $this->parseAssocData($header[0][0]);
         return $header;
     }
 
@@ -118,36 +119,36 @@ class XmlUploadController extends Controller
         // Есть возможность передавать истанции класса в функции и делать с этим что-то
         // Но это может привести к дальнейшим проблемам с отладкой, поэтому делается так
         foreach ($body as $elem) {
-            if ($header["ВерсияФормата"] == "1.01") {
+            if ($header["ВерсияФормата"] == "1.01" || $header["ВерсияФормата"] == "1.03") {
                 $senderIndex = "Плательщик";
                 $recieverIndex = "Получатель";
             } else {
                 $senderIndex = "Плательщик1";
                 $recieverIndex = "Получатель1";
             }
-            $kontragent = Kontragent::where("name_kontragent", "=", $elem[$senderIndex])->first();
-            if ($kontragent === null) {
-                $kontragent = new Kontragent;
-                $kontragent->name_kontragent = $elem[$senderIndex];
-                $kontragent->save();
+            $kontragent_s = Kontragent::where("name_kontragent", "=", $elem[$senderIndex])->first();
+            if ($kontragent_s === null) {
+                $kontragent_s = new Kontragent;
+                $kontragent_s->name_kontragent = $elem[$senderIndex];
+                $kontragent_s->save();
             }
-            $schet = $kontragent->INNs->where("inn_kontragent", "=", $elem["ПлательщикИНН"])->first();
-            if ($schet === null) {
-                $schet = new INN_kontragent;
-                $schet->inn_kontragent = $elem["ПлательщикИНН"];
-                $kontragent->INNs()->save($schet);
+            $schet_s = $kontragent_s->INNs->where("inn_kontragent", "=", $elem["ПлательщикИНН"])->first();
+            if ($schet_s === null) {
+                $schet_s = new INN_kontragent;
+                $schet_s->inn_kontragent = $elem["ПлательщикИНН"];
+                $kontragent_s->INNs()->save($schet_s);
             }
-            $kontragent = Kontragent::where("name_kontragent", "=", $elem[$recieverIndex])->first();
-            if ($kontragent === null) {
-                $kontragent = new Kontragent;
-                $kontragent->name_kontragent = $elem[$recieverIndex];
-                $kontragent->save();
+            $kontragent_r = Kontragent::where("name_kontragent", "=", $elem[$recieverIndex])->first();
+            if ($kontragent_r === null) {
+                $kontragent_r = new Kontragent;
+                $kontragent_r->name_kontragent = $elem[$recieverIndex];
+                $kontragent_r->save();
             }
-            $schet = $kontragent->INNs->where("inn_kontragent", "=", $elem["ПолучательИНН"])->first();
-            if ($schet === null) {
-                $schet = new INN_kontragent;
-                $schet->inn_kontragent = $elem["ПолучательИНН"];
-                $kontragent->INNs()->save($schet);
+            $schet_r = $kontragent_r->INNs->where("inn_kontragent", "=", $elem["ПолучательИНН"])->first();
+            if ($schet_r === null) {
+                $schet_r = new INN_kontragent;
+                $schet_r->inn_kontragent = $elem["ПолучательИНН"];
+                $kontragent_r->INNs()->save($schet_r);
             }
 
             $compareDate = explode(".", $elem["Дата"]);
@@ -225,7 +226,13 @@ class XmlUploadController extends Controller
                 $plateg_vipska->NomerSchetaPostavshchika = $elem["НомерСчетаПоставщика"] ?? NULL;
                 $plateg_vipska->PlateZHPOPredst = $elem["ПлатежПосредств"] ?? NULL;
                 $plateg_vipska->DopolNUsloviya = $elem["ДополУсловия"] ?? NULL;
-                $plateg_vipska->DataOtsylkiDok = $elem["ДатаОтсылкиДок"] ?? NULL;
+                $new_date = explode(".", $elem["ДатаОтсылкиДок"] ?? NULL);
+                if (count($new_date) > 1) {
+                    $new_date = "{$new_date[2]}-{$new_date[1]}-{$new_date[0]}";
+                } else {
+                    $new_date = NULL;
+                }
+                $plateg_vipska->DataOtsylkiDok = $new_date ?? NULL;
                 $plateg_vipska->KodNazPlatezha = $elem["КодНазПлатежа"] ?? NULL;
                 $plateg_vipska->Kod = $elem["Код"] ?? NULL;
                 $plateg_vipska->KodDebitora = $elem["КодДебитора"] ?? NULL;
@@ -233,6 +240,24 @@ class XmlUploadController extends Controller
                 $plateg_vipska->NazvanieFajla = $fileName;
                 $plateg_vipska->save();
                 $uploaded++;
+                
+                $plateglinc = new PlategLinc;
+                $id = $plateg_vipska->id;
+                $plateglinc->id_plateg_vipiska_all = $id;
+                $plateglinc->MD5_plateg = $plateg_vipska->UnikalnyjMD5platezha;
+                $plateglinc->data_plateg = $plateg_vipska->Data;
+                $plateglinc->osnovanie_user = NULL;
+                $plateglinc->id_kontragent = $kontragent_s->id;
+                $plateglinc->summ_plateg = $plateg_vipska->Summa;
+                $plateglinc->inn_kontragent = $kontragent_s->INNs()->first()->id;
+                $plateglinc->PlatelshchiKRasCHSchet = $plateg_vipska->PlatelshchickRasChshet;
+                $plateglinc->PlatelshchiKINN = $kontragent_s->INNs()->first()->inn_kontragent;
+                $plateglinc->PoluchatelRasCHSchet = $plateg_vipska->PoluchatelRasChshet;
+                $plateglinc->PoluchatelINN = $kontragent_r->INNs()->first()->inn_kontragent;
+                $plateglinc->Tip_plateg = "БезНал";
+                $plateglinc->Сheck_report = 2;
+                $plateglinc->data_report = date('Y-m-d h:i:s');
+                $plateglinc->save();
             }
         }
         $raschet = $raschet[0];

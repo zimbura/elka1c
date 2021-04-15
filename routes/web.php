@@ -4,6 +4,8 @@ use App\Http\Controllers\IndexController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\XmlUploadController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\KontragentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,4 +23,6 @@ Route::get('/', [IndexController::class, "index"]);
 Route::post("/xmlupload", [XmlUploadController::class, "uploadfile"])->name("xmlupload");
 Route::post("/login", [LoginController::class, "login"])->name("login");
 Route::post("/changeRoles/{id}", [RolesController::class, "changeRoles"])->name("changerole");
+Route::get("/kontragents", [KontragentController::class, "index"])->name("kontragents");
+Route::get("/users", [UserController::class, "index"])->name("users");
 

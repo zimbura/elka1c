@@ -24,8 +24,8 @@ class CreatePlategVipiskaAllTable extends Migration
             $table->double("Summa")->nullable();
             $table->string("PlatelshikSchet")->nullable();
             $table->date("DataSpisano")->nullable();
-            $table->string("Platelshchick", 200)->nullable();
-            $table->string("Platelshchick1", 200)->nullable();
+            $table->string("Platelshchick", 250)->nullable();
+            $table->string("Platelshchick1", 250)->nullable();
             $table->string("PlatelshchickINN", 50)->nullable();
             $table->string("PlatelshchickKPP", 50)->nullable();
             $table->string("PlatelshchickRasChshet", 50)->nullable();
@@ -34,8 +34,8 @@ class CreatePlategVipiskaAllTable extends Migration
             $table->string("PlatelshchickKorschet", 50)->nullable();
             $table->string("PoluchatelSchet", 50)->nullable();
             $table->date("DataPostupilo")->nullable();
-            $table->string("Poluchatel", 100)->nullable();
-            $table->string("Poluchatel1", 100)->nullable();
+            $table->string("Poluchatel", 250)->nullable();
+            $table->string("Poluchatel1", 250)->nullable();
             $table->string("PoluchatelINN", 50)->nullable();
             $table->string("PoluchatelKPP", 50)->nullable();
             $table->string("PoluchatelRasChshet", 50)->nullable();

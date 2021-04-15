@@ -15,7 +15,7 @@ class CreateInnKontragentTable extends Migration
     {
         Schema::create('inn_kontragent', function (Blueprint $table) {
             $table->id();
-            $table->string("inn_kontragent", 10);
+            $table->string("inn_kontragent", 15);
             $table->unsignedBigInteger("id_kontragent");
             $table->foreign("id_kontragent")->references("id")->on("kontragent");
         });

@@ -18,7 +18,8 @@ class UserTableSeeder extends Seeder
         $user = User::create([
             "name" => "admin",
             "email" => "admin@admin.ru",
-            "password" => bcrypt("admin")
+            "password" => bcrypt("admin"),
+            "status" => "Работает"
         ]);
         $role = Role::create([
             "name" => "Админ",
@@ -29,7 +30,8 @@ class UserTableSeeder extends Seeder
         $user = User::create([
             "name" => "user",
             "email" => "user@user.ru",
-            "password" => bcrypt("user")
+            "password" => bcrypt("user"),
+            "status" => "Уволен"
         ]);
         $role = Role::create([
             "name" => "Пользователь",
@@ -40,7 +42,8 @@ class UserTableSeeder extends Seeder
         $user = User::create([
             "name" => "director",
             "email" => "director@director.ru",
-            "password" => bcrypt("director")
+            "password" => bcrypt("director"),
+            "status" => "Работает",
         ]);
         $role = Role::create([
             "name" => "Директор",
