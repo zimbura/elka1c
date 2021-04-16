@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 
 use App\Permissions\HasPermissionsTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -43,4 +44,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function kontragents() {
+        return $this->hasMany(Kontragent::class, "id_user");
+    }
 }

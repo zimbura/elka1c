@@ -6,6 +6,7 @@ use App\Http\Controllers\XmlUploadController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\KontragentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PaymentsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,5 +25,8 @@ Route::post("/xmlupload", [XmlUploadController::class, "uploadfile"])->name("xml
 Route::post("/login", [LoginController::class, "login"])->name("login");
 Route::post("/changeRoles/{id}", [RolesController::class, "changeRoles"])->name("changerole");
 Route::get("/kontragents", [KontragentController::class, "index"])->name("kontragents");
+Route::get("/kontragent/{kontragent}", [KontragentController::class, "show"])->name("kontragentview");
 Route::get("/users", [UserController::class, "index"])->name("users");
+Route::get("/user/{user}", [UserController::class, "show"])->name("userview");
+Route::get("/payments", [PaymentsController::class, "index"])->name("payments");
 

@@ -11,4 +11,8 @@ class UserController extends Controller
         $users = User::paginate(100);
         return view("users")->with("users", $users);
     }
+
+    public function show(Request $request, User $user){
+        return view("userview")->with("user", $user);
+    }
 }
