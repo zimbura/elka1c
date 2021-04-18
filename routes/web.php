@@ -20,13 +20,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [IndexController::class, "index"]);
+Route::get('/', [IndexController::class, "index"])->name("index");
 Route::post("/xmlupload", [XmlUploadController::class, "uploadfile"])->name("xmlupload");
 Route::post("/login", [LoginController::class, "login"])->name("login");
 Route::post("/changeRoles/{id}", [RolesController::class, "changeRoles"])->name("changerole");
 Route::get("/kontragents", [KontragentController::class, "index"])->name("kontragents");
 Route::get("/kontragent/{kontragent}", [KontragentController::class, "show"])->name("kontragentview");
+Route::post("edit/kontragent/{kontragent}", [KontragentController::class, "editkontragent"])->name("kontragentedit");
 Route::get("/users", [UserController::class, "index"])->name("users");
 Route::get("/user/{user}", [UserController::class, "show"])->name("userview");
+Route::post("/edit/user/{user}", [UserController::class, "edituser"])->name("useredit");
 Route::get("/payments", [PaymentsController::class, "index"])->name("payments");
-

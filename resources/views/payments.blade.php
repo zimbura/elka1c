@@ -1,3 +1,4 @@
+@include("nav")
 <table>
     <tr>
         <th>#</th>

@@ -1,3 +1,4 @@
+@include("nav")
 <table>
     <tr>
         <th>ID</th>
@@ -20,7 +21,7 @@
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
+            <th><a href="{{route('kontragentview', $kontragent->id)}}">Просмотр/Редактирование</a></th>
         </tr>
     @endforeach
 </table>

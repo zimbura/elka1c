@@ -1,18 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>1й этап</title>
-</head>
-
-<body>
-
-</body>
-
-</html>
+@include("nav")
 {{-- Форма загрузки файла, в дальнейшем будет перемещена в нужную часть фронта --}}
+@role("admin")
 <H2>Загрузка данных</H2>
 <form action="{{ route('xmlupload') }}" method="post" enctype="multipart/form-data">
     @csrf
@@ -29,6 +18,7 @@
         </ul>
     </div>
 @endif
+@endrole
 
 <form action="{{ route('login') }}" method="POST">
     @csrf
@@ -56,25 +46,6 @@
 </div>
 @role("admin")
 <h1>Вы админ</h1>
-@foreach ($users as $user)
-    <p>Имя пользователя: {{ $user->name }}</p>
-    <p>
-        Роли пользователя
-        @foreach ($user->roles as $role)
-            {{ $role->name }}
-        @endforeach
-    </p>
-
-    <form action="{{ route('changerole', $user->id) }}" method="POST">
-        @csrf
-        @foreach ($roles as $role)
-            <label for="">{{ $role->name }}</label>
-            <input type="checkbox" name="roles[]" value="{{ $role->id }}"
-                @if ($user->hasRole($role->slug)) checked @endif>
-        @endforeach
-        <button type="submit">Сохранить</button>
-    </form>
-@endforeach
 @endrole
 
 @role("director")

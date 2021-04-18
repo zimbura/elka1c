@@ -1,3 +1,4 @@
+@include("nav")
 <table>
     <tr>
         <th>Сотрудник</th>
@@ -20,7 +21,7 @@
                 @endforeach
             </th>
             <th>{{ $user->status }}</th>
-            <th></th>
+            <th><a href="{{route('userview', $user->id)}}">Просмотр/Редактирование</a></th>
         </tr>
     @endforeach
 </table>

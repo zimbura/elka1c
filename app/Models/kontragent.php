@@ -13,4 +13,8 @@ class Kontragent extends Model
     public function INNs() {
         return $this->hasMany(INN_kontragent::class, "id_kontragent");
     }
+
+    public function user() {
+        return $this->belongsTo(User::class, "id_user");
+    }
 }
