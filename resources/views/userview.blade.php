@@ -21,7 +21,15 @@
             {{ $role->name }}
         @endforeach
     </p>
-    <p>Наша компания:{{ $user->my_kontragent()->first()->name_kontragent ?? "Нет компании"}}</p>
+    <p>Наша компания:{{ $user->my_kontragent()->first()->name_kontragent ?? 'Нет компании' }}</p>
+    <form action="{{ route('useredit', $user->id) }}" method="POST">
+        @csrf
+        @role("user")
+        <p>Пароль</p>
+        <input type="text" name="password">
+        <button type="submit">Сохранить</button>
+        @endrole
+    </form>
     @role("admin", "director")
     <form action="{{ route('useredit', $user->id) }}" method="POST">
         @csrf

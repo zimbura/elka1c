@@ -44,7 +44,7 @@ class UserController extends Controller
         $user->name = $request->name ?? $user->name;
         $user->phone = $request->phone ?? $user->phone;
         $user->phone2 =  $request->phone2 ?? $user->phone2;
-        $user->status = $request->status;
+        $user->status = $request->status ?? $user->status;
         $user->wage = $request->wage ?? $user->wage;
         $user->percent = $request->percent ?? $user->percent;
         $user->salary = $request->salary ?? $user->salary;
