@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/index', [IndexController::class, "index"])->name("index");
+Route::get('/', [IndexController::class, "index"])->name("index");
 Route::get('/xml', [XmlUploadController::class, "index"])->name("xml");
 Route::post("/xmlupload", [XmlUploadController::class, "uploadfile"])->name("xmlupload");
 Route::post("/login", [LoginController::class, "login"])->name("login");
