@@ -27,6 +27,7 @@
     <button type="submit">Войти</button>
 </form>
 <div>
+    Проверка
     Данные для входа
     <h2>Админ</h2>
     <div>
