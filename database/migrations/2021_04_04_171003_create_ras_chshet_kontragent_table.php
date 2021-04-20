@@ -15,10 +15,13 @@ class CreateRasChshetKontragentTable extends Migration
     {
         Schema::create('raschshet_kontragent', function (Blueprint $table) {
             $table->id();
-            $table->string("raschshet_kontragent", 50);
-            $table->unsignedBigInteger("id_kontragent");
+            $table->string("raschshet_kontragent", 50)->nullable();
+            $table->unsignedBigInteger("id_kontragent")->nullable();
             $table->foreign("id_kontragent")->references("id")->on("kontragent");
-            $table->string("comment_schet_kontragent", 255);
+            $table->string("CurrencyRaschetnyjSchet")->nullable();
+            $table->string("RaschetnyjSchetDefault")->nullable();
+            $table->string("RasChshetBik")->nullable();
+            $table->string("comment_schet_kontragent", 255)->nullable();
             
         });
     }

@@ -32,6 +32,7 @@ class CreatePlategVipiskaAllTable extends Migration
             $table->string("PlatelshchickBank1", 100)->nullable();
             $table->string("PlatelshchickBIK", 50)->nullable();
             $table->string("PlatelshchickKorschet", 50)->nullable();
+            $table->string("RasCHSchet_kontragent")->nullable();
             $table->string("PoluchatelSchet", 50)->nullable();
             $table->date("DataPostupilo")->nullable();
             $table->string("Poluchatel", 250)->nullable();
@@ -54,7 +55,7 @@ class CreatePlategVipiskaAllTable extends Migration
             $table->string("PokazatelNomera", 50)->nullable();
             $table->string("PokazatelDaty", 50)->nullable();
             $table->string("Ocherednost", 50)->nullable();
-            $table->string("NaznacheniePlatezha", 250)->nullable();
+            $table->text("NaznacheniePlatezha")->nullable();
             $table->string("VidAkkreditiva", 50)->nullable();
             $table->string("NomerSchetaPostavshchika", 50)->nullable();
             $table->string("PlateZHPOPredst", 50)->nullable();
@@ -64,7 +65,7 @@ class CreatePlategVipiskaAllTable extends Migration
             $table->string("Kod", 50)->nullable();
             $table->string("KodDebitora", 50)->nullable();
             $table->string("PokazatelTipa", 50)->nullable();
-            $table->string("NazvanieFajla", 50)->nullable();
+            $table->string("NazvanieFajla")->nullable();
         });
     }
 

@@ -20,7 +20,7 @@
             <th>{{ $kontragent->name_kontragent }}</th>
             <th></th>
             <th></th>
-            <th></th>
+            <th>{{ $kontragent->MyKontragent ? "Мой" : "" }}</th>
             <th><a href="{{route('kontragentview', $kontragent->id)}}">Просмотр/Редактирование</a></th>
         </tr>
     @endforeach

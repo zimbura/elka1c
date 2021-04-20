@@ -26,6 +26,7 @@ class KontragentController extends Controller
         // Местами база мешает, местами собвственная лень
         // Todo: Поправить этот код и добавить валидацию
         $kontragent->name_kontragent = $request->name ?? $kontragent->name_kontragent;
+        $kontragent->MyKontragent = $request->mykontragent ? 1 : 0 ?? 0;;
         $inn = $kontragent->INNs()->first();
         if (!$inn->empty) {
             $inn->inn_kontragent = $request->inn ?? $inn->inn_kontragent;
@@ -33,10 +34,16 @@ class KontragentController extends Controller
         }
         $user = User::find($request->input("user"));
         if ($user !== NULL) {
-            $kontragent->users()->dissociate();
-            $kontragent->users()->associate($user);
+            $kontragent->user()->dissociate();
+            $kontragent->user()->associate($user);
         }
         $kontragent->save();
         return back();
+    }
+
+    public function mykontragents()
+    {
+        $kontragents = Kontragent::where("MyKontragent", 1)->paginate(100);
+        return view("kontragents")->with("kontragents", $kontragents);
     }
 }

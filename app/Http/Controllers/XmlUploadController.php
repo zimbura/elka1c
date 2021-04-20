@@ -9,6 +9,8 @@ use App\Models\Kontragent;
 use App\Models\OstatkiOtchetKontragent;
 use App\Models\PlategLinc;
 use App\Models\PlategVipiskaAll;
+use App\Models\RaschSchet;
+use Illuminate\Support\Facades\Auth;
 
 class XmlUploadController extends Controller
 {
@@ -126,22 +128,22 @@ class XmlUploadController extends Controller
                 $senderIndex = "Плательщик1";
                 $recieverIndex = "Получатель1";
             }
-            $kontragent_s = Kontragent::where("name_kontragent", "=", $elem[$senderIndex])->first();
+            $kontragent_s = Kontragent::where("name_kontragent", "=", $elem[$senderIndex] ?? "Плательщик1")->first();
             if ($kontragent_s === null) {
                 $kontragent_s = new Kontragent;
-                $kontragent_s->name_kontragent = $elem[$senderIndex];
+                $kontragent_s->name_kontragent = $elem[$senderIndex] ?? "Плательщик1";
                 $kontragent_s->save();
             }
-            $schet_s = $kontragent_s->INNs->where("inn_kontragent", "=", $elem["ПлательщикИНН"])->first();
+            $schet_s = $kontragent_s->INNs->where("inn_kontragent", "=", $elem["ПлательщикИНН"] )->first();
             if ($schet_s === null) {
                 $schet_s = new INN_kontragent;
                 $schet_s->inn_kontragent = $elem["ПлательщикИНН"];
                 $kontragent_s->INNs()->save($schet_s);
             }
-            $kontragent_r = Kontragent::where("name_kontragent", "=", $elem[$recieverIndex])->first();
+            $kontragent_r = Kontragent::where("name_kontragent", "=", $elem[$recieverIndex] ?? "Получатель1")->first();
             if ($kontragent_r === null) {
                 $kontragent_r = new Kontragent;
-                $kontragent_r->name_kontragent = $elem[$recieverIndex];
+                $kontragent_r->name_kontragent = $elem[$recieverIndex] ?? "Получатель1";
                 $kontragent_r->save();
             }
             $schet_r = $kontragent_r->INNs->where("inn_kontragent", "=", $elem["ПолучательИНН"])->first();
@@ -159,7 +161,9 @@ class XmlUploadController extends Controller
                 ->where("Summa", "=", $elem["Сумма"])
                 ->where("PlatelshchickINN", "=", $elem["ПлательщикИНН"])
                 ->where("PlatelshchickRasChshet", "=", $elem["ПлательщикРасчСчет"])
+                ->where("PlatelshchickBIK", "=", $elem["ПлательщикБИК"])
                 ->where("PoluchatelINN", "=", $elem["ПолучательИНН"])
+                ->where("PoluchatelBIK", "=", $elem["ПолучательБИК"])
                 ->where("PoluchatelRasChshet", "=", $elem["ПолучательРасчСчет"])
                 ->where("VidOplaty", "=", $elem["ВидОплаты"])
                 ->first();
@@ -192,6 +196,7 @@ class XmlUploadController extends Controller
                 $plateg_vipska->PlatelshchickBank1 = $elem["ПлательщикБанк1"] ?? NULL;
                 $plateg_vipska->PlatelshchickBIK = $elem["ПлательщикБИК"] ?? NULL;
                 $plateg_vipska->PlatelshchickKorschet = $elem["ПлательщикКорсчет"] ?? NULL;
+                $plateg_vipska->RasCHSchet_kontragent = $header["РасчСчет"] ?? NULL;
                 $plateg_vipska->PoluchatelSchet = $elem["ПолучательСчет"] ?? NULL;
                 $new_date = explode(".", $elem["ДатаПоступило"] ?? NULL);
                 if (count($new_date) > 1) {
@@ -240,7 +245,6 @@ class XmlUploadController extends Controller
                 $plateg_vipska->NazvanieFajla = $fileName;
                 $plateg_vipska->save();
                 $uploaded++;
-                
                 $plateglinc = new PlategLinc;
                 $id = $plateg_vipska->id;
                 $plateglinc->id_plateg_vipiska_all = $id;
@@ -257,20 +261,49 @@ class XmlUploadController extends Controller
                 $plateglinc->Tip_plateg = "БезНал";
                 $plateglinc->Сheck_report = 2;
                 $plateglinc->data_report = date('Y-m-d h:i:s');
+                $plateglinc->UserInsert = Auth::id();
+                $plateglinc->NaznacheniePlatezha = $elem["НазначениеПлатежа"];
+                $plateglinc->CurrencyPlateg = "RUB";
+                $plateglinc->DataUserInsert = date('Y-m-d h:i:s');
                 $plateglinc->save();
+
+                $ras_schet_r = RaschSchet::where("raschshet_kontragent", "=", $elem["ПолучательРасчСчет"])
+                    ->where("RasChshetBik", "=", $elem["ПолучательБИК"])
+                    ->first();
+                if ($ras_schet_r === null) {
+                    $ras_schet_r = new RaschSchet();
+                    $ras_schet_r->raschshet_kontragent = $elem["ПолучательРасчСчет"];
+                    $ras_schet_r->id_kontragent = $kontragent_r->id;
+                    $ras_schet_r->CurrencyRaschetnyjSchet = "RUB";
+                    $ras_schet_r->RasChshetBik = $elem["ПолучательБИК"];
+                    $ras_schet_r->save();
+                }
+                $ras_schet_s = RaschSchet::where("raschshet_kontragent", "=", $elem["ПлательщикРасчСчет"])
+                    ->where("RasChshetBik", "=", $elem["ПлательщикБИК"])
+                    ->first();
+                if ($ras_schet_s === null) {
+                    $ras_schet_s = new RaschSchet();
+                    $ras_schet_s->raschshet_kontragent = $elem["ПлательщикРасчСчет"];
+                    $ras_schet_s->id_kontragent = $kontragent_s->id;
+                    $ras_schet_s->CurrencyRaschetnyjSchet = "RUB";
+                    $ras_schet_s->RasChshetBik = $elem["ПлательщикБИК"];
+                    $ras_schet_s->save();
+                }
             }
         }
+
         $raschet = $raschet[0];
         $ostatkiSchet = new OstatkiOtchetKontragent;
         $ostatkiSchet->RasChschet = $raschet["РасчСчет"] ?? NULL;
-        $new_date = explode(".", $raschet["ДатаСозданияВыписка"] ?? NULL);
+        $ostatkiSchet->id_user = Auth::id();
+        $new_date = explode(".", $header["ДатаСоздания"] ?? NULL);
         if (count($new_date) > 1) {
             $new_date = "{$new_date[2]}-{$new_date[1]}-{$new_date[0]}";
         } else {
             $new_date = NULL;
         }
         $ostatkiSchet->DataSozdaniya_vipiska = $new_date ?? NULL;
-        $ostatkiSchet->Vremyasozdaniya = $raschet["ВремяСоздания"] ?? NULL;
+        $ostatkiSchet->Vremyasozdaniya = $header["ВремяСоздания"] ?? NULL;
         $new_date = explode(".", $raschet["ДатаНачала"] ?? NULL);
         if (count($new_date) > 1) {
             $new_date = "{$new_date[2]}-{$new_date[1]}-{$new_date[0]}";
@@ -291,6 +324,7 @@ class XmlUploadController extends Controller
         $ostatkiSchet->KonechniyOstatok = $raschet["КонечныйОстаток"] ?? NULL;
         $ostatkiSchet->VersiyaFormata = $header["ВерсияФормата"] ?? NULL;
         $ostatkiSchet->VsegoSektsijVDokumente = count($body);
+        $ostatkiSchet->DublikatoVSektsij = count($body) - $uploaded;
         $ostatkiSchet->ZagruzhenoSektsij = $uploaded;
         $ostatkiSchet->NazvanieFajla = $fileName ?? NULL;
         $ostatkiSchet->DataObrabotkiFajla = $date ?? NULL;

@@ -17,4 +17,8 @@ class Kontragent extends Model
     public function user() {
         return $this->belongsTo(User::class, "id_user");
     }
+
+    public function schets() {
+        return $this->hasMany(RaschSchet::class, "id_kontragent");
+    }
 }

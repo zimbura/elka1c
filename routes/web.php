@@ -25,6 +25,7 @@ Route::post("/xmlupload", [XmlUploadController::class, "uploadfile"])->name("xml
 Route::post("/login", [LoginController::class, "login"])->name("login");
 Route::post("/changeRoles/{id}", [RolesController::class, "changeRoles"])->name("changerole");
 Route::get("/kontragents", [KontragentController::class, "index"])->name("kontragents");
+Route::get("/mykontragents", [KontragentController::class, "mykontragents"])->name("mykontragents");
 Route::get("/kontragent/{kontragent}", [KontragentController::class, "show"])->name("kontragentview");
 Route::post("edit/kontragent/{kontragent}", [KontragentController::class, "editkontragent"])->name("kontragentedit");
 Route::get("/users", [UserController::class, "index"])->name("users");

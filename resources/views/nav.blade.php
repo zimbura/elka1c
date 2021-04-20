@@ -7,6 +7,7 @@
 <ul>
     <li><a href="{{ route("index")}}">Домой</a></li>
     <li><a href="{{ route("kontragents")}}">Все контрагенты</a></li>
+    <li><a href="{{ route("mykontragents")}}">Мои контрагенты</a></li>
     <li><a href="{{ route("payments")}}">Все платежи</a></li>
     <li><a href="{{ route("users")}}">Все пользователи</a></li>
 </ul>

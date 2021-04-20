@@ -18,6 +18,7 @@ class CreateNameKontragentTable extends Migration
             $table->string("name_kontragent", 100);
             $table->unsignedBigInteger("id_kontragent");
             $table->foreign("id_kontragent")->references("id")->on("kontragent");
+            $table->string("NameDefault")->nullable();
         });
     }
 

@@ -39,6 +39,15 @@ class CreatePlategVipiskaLincTable extends Migration
             $table->string("Tip_plateg", 100)->nullable();
             $table->string("Сheck_report", 10)->nullable();
             $table->datetime("data_report")->nullable();
+            $table->unsignedBigInteger("UserInsert")->nullable();
+            $table->foreign("UserInsert")->references("id")->on("users")->nullable();
+            $table->dateTime("DataUserInsert")->nullable();
+            $table->unsignedBigInteger("UserEdit")->nullable();
+            $table->foreign("UserEdit")->references("id")->on("users")->nullable();
+            $table->dateTime("DataUserEdit")->nullable();
+            $table->text("NaznacheniePlatezha")->nullable();
+            $table->string("CurrencyPlateg")->nullable();
+            $table->string("FileReport")->nullable();
         });
     }
 

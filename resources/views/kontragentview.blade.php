@@ -28,6 +28,11 @@
             <option  value="{{ $user->id }}" @if(($kontragent->user->id ?? NULL) == $user->id) selected="selected" @endif>{{ $user->name }}</option>
         @endforeach
     </select>
+    
+    <label for="">Мой контрагент</label>
+    <input @if (($kontragent->MyKontragent ?? NULL))
+        checked
+    @endif type="checkbox" name="mykontragent" id="">
     <button type="submit">Сохранить</button>
 </form>
 @endrole

@@ -17,8 +17,8 @@ class CreateOstatkiSchetKontragentTable extends Migration
             $table->id();
             $table->unsignedBigInteger("id_schet")->nullable();
             $table->foreign("id_schet")->references("id")->on("raschshet_kontragent");
-            $table->unsignedBigInteger("id_kontragent")->nullable();
-            $table->foreign("id_kontragent")->references("id")->on("kontragent");
+            $table->unsignedBigInteger("id_user")->nullable();
+            $table->foreign("id_user")->references("id")->on("users");
             $table->string("RasChschet", 50)->nullable();
             $table->date("DataSozdaniya_vipiska")->nullable();
             $table->time("Vremyasozdaniya")->nullable();
@@ -30,6 +30,7 @@ class CreateOstatkiSchetKontragentTable extends Migration
             $table->double("KonechniyOstatok", 100)->nullable();
             $table->string("VersiyaFormata", 25)->nullable();
             $table->string("VsegoSektsijVDokumente", 25)->nullable();
+            $table->string("DublikatoVSektsij", 25)->nullable();
             $table->string("ZagruzhenoSektsij", 25)->nullable();
             $table->string("NazvanieFajla", 250)->nullable();
             $table->datetime("DataObrabotkiFajla")->nullable();
