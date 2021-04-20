@@ -20,10 +20,14 @@ class CreateKontragentsTable extends Migration
             $table->string("tel_kontragent")->nullable();
             $table->string("email_kontragent")->nullable();
             $table->string("name_kontragent");
+            $table->string("KontaktUserKontragent")->nullable();
+            $table->string("KontaktUserKontragent2")->nullable();
+            $table->string("TelKontragent2")->nullable();
             $table->boolean("MyKontragent")->nullable();
             $table->string("forma_kontragent")->nullable();
             $table->string("nalog_kontragent")->nullable();
             $table->boolean("NdsKontragent")->nullable();
+            $table->text("NoteKontragent")->nullable();
         });
     }
 

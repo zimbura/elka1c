@@ -32,7 +32,15 @@ class KontragentController extends Controller
         // Местами база мешает, местами собвственная лень
         // Todo: Поправить этот код и добавить валидацию
         $kontragent->name_kontragent = $request->name ?? $kontragent->name_kontragent;
-        $kontragent->MyKontragent = $request->mykontragent ? 1 : 0 ?? 0;;
+        $kontragent->email_kontragent = $request->email ?? $kontragent->email_kontragent;
+        $kontragent->MyKontragent = $request->mykontragent ? 1 : 0 ?? 0;
+        $kontragent->NdsKontragent = $request->nds ? 1 : 0 ?? 0;
+        $kontragent->KontaktUserKontragent = $request->contactname ?? $kontragent->KontaktUserKontragent;
+        $kontragent->KontaktUserKontragent2 = $request->contactnameobj ?? $kontragent->KontaktUserKontragent2;
+        $kontragent->TelKontragent2 = $request->phone ?? $kontragent->TelKontragent2;
+        $kontragent->forma_kontragent = $request->type ?? $kontragent->forma_kontragent;
+        $kontragent->nalog_kontragent = $request->tax ?? $kontragent->nalog_kontragent;
+        $kontragent->NoteKontragent = $request->note ?? $kontragent->NoteKontragent;
         $inn = $kontragent->INNs()->first();
         if (!$inn->empty) {
             $inn->inn_kontragent = $request->inn ?? $inn->inn_kontragent;
