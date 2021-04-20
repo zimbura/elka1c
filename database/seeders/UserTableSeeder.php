@@ -19,7 +19,11 @@ class UserTableSeeder extends Seeder
             "name" => "admin",
             "email" => "admin@admin.ru",
             "password" => bcrypt("admin"),
-            "status" => "Работает"
+            "status" => "Работает",
+            "hiredate" => date('Y-m-d'),
+            "wage" => "30000",
+            "percent" => "50",
+            "salary" => "300000",
         ]);
         $role = Role::create([
             "name" => "Админ",
@@ -31,7 +35,11 @@ class UserTableSeeder extends Seeder
             "name" => "user",
             "email" => "user@user.ru",
             "password" => bcrypt("user"),
-            "status" => "Уволен"
+            "status" => "Уволен",
+            "hiredate" => date('Y-m-d'),
+            "wage" => "20000",
+            "percent" => "40",
+            "salary" => "200000",
         ]);
         $role = Role::create([
             "name" => "Пользователь",
@@ -44,11 +52,19 @@ class UserTableSeeder extends Seeder
             "email" => "director@director.ru",
             "password" => bcrypt("director"),
             "status" => "Работает",
+            "hiredate" => date('Y-m-d'),
+            "wage" => "10000",
+            "percent" => "30",
+            "salary" => "100000",
         ]);
         $role = Role::create([
             "name" => "Директор",
             "slug" => "director"
         ]);
         $user->roles()->attach($role);
+        $role = Role::create([
+            "name" => "Бухгалтер",
+            "slug" => "accountant"
+        ]);
     }
 }

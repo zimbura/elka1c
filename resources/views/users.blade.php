@@ -14,6 +14,7 @@
             <th>{{ $user->name }}</th>
             <th>{{ $user->phone }}</th>
             <th>{{ $user->email }}</th>
+            
             <th>
                 @foreach ($user->roles as $role)
                     {{ $role->name }}

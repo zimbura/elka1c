@@ -23,6 +23,7 @@ class CreateKontragentsTable extends Migration
             $table->boolean("MyKontragent")->nullable();
             $table->string("forma_kontragent")->nullable();
             $table->string("nalog_kontragent")->nullable();
+            $table->boolean("NdsKontragent")->nullable();
         });
     }
 

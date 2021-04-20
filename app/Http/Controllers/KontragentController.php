@@ -10,12 +10,18 @@ class KontragentController extends Controller
 {
     public function index()
     {
+        if (!auth()->check() || !auth()->user()->hasRole("admin", "director", "accountant")) {
+            abort(404);
+        }
         $kontragents = Kontragent::paginate(100);
         return view("kontragents")->with("kontragents", $kontragents);
     }
 
     public function show(Request $request, Kontragent $kontragent)
     {
+        if (!auth()->check() && !auth()->user()->hasRole("admin", "director", "accountant")) {
+            abort(404);
+        }
         $users = User::all();
         return view("kontragentview")->with(["kontragent" => $kontragent, "users" => $users]);
     }

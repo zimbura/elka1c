@@ -18,12 +18,11 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
             return redirect()->back();
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'Данные для входа не верны',
         ]);
     }
 }

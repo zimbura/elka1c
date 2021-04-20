@@ -9,8 +9,7 @@ use Illuminate\Http\Request;
 class IndexController extends Controller
 {
     public function index() {
-        $users = User::all();
-        $roles = Role::all();
-        return view("xmlupload")->with(["users" => $users, "roles" => $roles]);
+        return view("index");
     }
+    
 }

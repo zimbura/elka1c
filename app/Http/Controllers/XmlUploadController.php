@@ -8,13 +8,20 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Kontragent;
 use App\Models\OstatkiOtchetKontragent;
 use App\Models\PlategLinc;
+use App\Models\User;
+use App\Models\Role;
 use App\Models\PlategVipiskaAll;
 use App\Models\RaschSchet;
 use Illuminate\Support\Facades\Auth;
 
 class XmlUploadController extends Controller
 {
-    // ToDo: Вынести функции получения в хэлпер
+    public function index() {
+        if (!auth()->check() || !auth()->user()->hasRole("admin", "director")) {
+            abort(404);
+        }
+        return view("xmlupload");
+    }
 
     public function uploadfile(Request $request)
     {
