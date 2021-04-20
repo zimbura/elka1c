@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 
 use App\Permissions\HasPermissionsTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
@@ -47,5 +48,11 @@ class User extends Authenticatable
 
     public function kontragents() {
         return $this->hasMany(Kontragent::class, "id_user");
+    }
+
+    public function my_kontragent() 
+    {   
+        $r = $this->belongsTo(Kontragent::class, "my_kontragent");
+        return $r;
     }
 }

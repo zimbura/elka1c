@@ -32,6 +32,7 @@ class UserController extends Controller
         if (!auth()->user()->hasRole("admin", "director", "accountant") && $user->id !== Auth::id()) {
             abort(404);
         }
+        $my_kontragent = $user->my_kontragent;
         $mycompanies = Kontragent::where("MyKontragent", 1)->get();
         $roles = Role::all();
         return view("userview")->with(["user" => $user, "roles" => $roles, "mycompanies" => $mycompanies]);
@@ -48,6 +49,7 @@ class UserController extends Controller
         $user->percent = $request->percent ?? $user->percent;
         $user->salary = $request->salary ?? $user->salary;
         $user->dismissdate = $request->dismissdate ?? $user->dismissdate;
+        $user->my_kontragent = $request->mycompany ?? $user->my_kontragent;
         $user->password = bcrypt($request->password) ?? $user->password;
         $roles = Role::findMany($request->input("roles"));
         $user->roles()->detach();

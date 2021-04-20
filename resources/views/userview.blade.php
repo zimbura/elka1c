@@ -9,8 +9,8 @@
     <p>Ставка {{ $user->wage }}</p>
     <p>Оклад {{ $user->salary }}</p>
     <p>Дата принятия на работу {{ $user->hiredate }}</p>
-    @if ($user->status == "Уволен")
-    <p>Дата увольнения{{ $user->dismissdate }}</p>
+    @if ($user->status == 'Уволен')
+        <p>Дата увольнения{{ $user->dismissdate }}</p>
     @endif
     @foreach ($user->kontragents as $kontragent)
         <p>{{ $kontragent->INNs->first()->inn_kontragent }}</p>
@@ -21,6 +21,7 @@
             {{ $role->name }}
         @endforeach
     </p>
+    <p>Наша компания:{{ $user->my_kontragent()->first()->name_kontragent ?? "Нет компании"}}</p>
     @role("admin", "director")
     <form action="{{ route('useredit', $user->id) }}" method="POST">
         @csrf
@@ -50,9 +51,10 @@
         <input type="date" name="dismissdate" id="">
         <p>Привязка к нашей компании</p>
         <select name="mycompany" id="">
-        @foreach ($mycompanies as $company)
-            <option value="{{$company->id}}" > {{$company->name_kontragent}} </option>
-        @endforeach
+            @foreach ($mycompanies as $company)
+                <option @if ($user->my_kontragent == $company->id) selected="selected" @endif value="{{ $company->id }}">
+                    {{ $company->name_kontragent }} </option>
+            @endforeach
         </select>
         @role("admin", "director")
         <p>Пароль</p>
