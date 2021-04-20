@@ -14,6 +14,13 @@
         {{$kontragent->user->name ?? NULL}}
     </p>
 </div>
+<div>Счета
+    
+        @foreach ($kontragent->schets as $schet)
+        <p>{{$schet->raschshet_kontragent}}  </p>  
+        @endforeach
+    
+</div>
 <div>
     Мой контрагент: {{ $kontragent->MyKontragent  ? "Да" : "Нет"}}
 </div>
