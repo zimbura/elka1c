@@ -15,7 +15,7 @@ class CreateNameKontragentTable extends Migration
     {
         Schema::create('name_kontragent', function (Blueprint $table) {
             $table->id();
-            $table->string("name_kontragent", 100);
+            $table->text("name_kontragent");
             $table->unsignedBigInteger("id_kontragent");
             $table->foreign("id_kontragent")->references("id")->on("kontragent");
             $table->string("NameDefault")->nullable();

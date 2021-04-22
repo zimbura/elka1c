@@ -30,8 +30,7 @@ class CreatePlategVipiskaLincTable extends Migration
             $table->foreign("id_kontragent")->references("id")->on("kontragent");
             $table->double("summ_plateg")->nullable();
             $table->double("summ_report")->nullable();
-            $table->unsignedBigInteger("inn_kontragent")->nullable();
-            $table->foreign("inn_kontragent")->references("id")->on("inn_kontragent");
+            $table->string("inn_kontragent", 100)->nullable();
             $table->string("PlatelshchiKRasCHSchet", 200)->nullable();
             $table->string("PlatelshchiKINN", 100)->nullable();
             $table->string("PoluchatelRasCHSchet", 100)->nullable();

@@ -1,16 +1,20 @@
 @include("nav")
 {{ $kontragent->name_kontragent }}
 <div>
-    ИНН:{{ $kontragent->INNs->first()->inn_kontragent }}
+    ИНН:{{ $kontragent->inn_kontragent}}
 </div>
 <div>
     email
     {{ $kontragent->email_kontragent }}
 </div>
 <div>
-    Имена контрагента
-    {{ $kontragent->name_kontragent }}
+    Имена контрагента <br>
+    <strong>{{ $kontragent->name_kontragent }}</strong><br>
+    @foreach ($kontragent->names as $name)
+        {{$name->name_kontragent}}<br>
+    @endforeach
 </div>
+<br>
 <div>
     Контактное лицо
     {{ $kontragent->KontaktUserKontragent }}

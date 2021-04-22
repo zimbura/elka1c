@@ -19,6 +19,7 @@ class CreateKontragentsTable extends Migration
             $table->foreign("id_user")->references("id")->on("users");
             $table->string("tel_kontragent")->nullable();
             $table->string("email_kontragent")->nullable();
+            $table->string("inn_kontragent", 15);
             $table->string("name_kontragent");
             $table->string("KontaktUserKontragent")->nullable();
             $table->string("KontaktUserKontragent2")->nullable();

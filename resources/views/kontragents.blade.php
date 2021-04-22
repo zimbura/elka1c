@@ -15,7 +15,7 @@
         <tr>
             <th>{{ $kontragent->id }}</th>
             <th></th>
-            <th>{{ $kontragent->INNs->first()->inn_kontragent }}</th>
+            <th>{{ $kontragent->inn_kontragent }}</th>
             <th>{{ $kontragent->name_kontragent }}</th>
             <th>{{ $kontragent->name_kontragent }}</th>
             <th></th>

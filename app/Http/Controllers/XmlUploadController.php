@@ -6,6 +6,7 @@ use App\Models\INN_kontragent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Kontragent;
+use App\Models\NameKontragent;
 use App\Models\OstatkiOtchetKontragent;
 use App\Models\PlategLinc;
 use App\Models\User;
@@ -16,7 +17,8 @@ use Illuminate\Support\Facades\Auth;
 
 class XmlUploadController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         if (!auth()->check() || !auth()->user()->hasRole("admin", "director")) {
             abort(404);
         }
@@ -128,38 +130,48 @@ class XmlUploadController extends Controller
         // Есть возможность передавать истанции класса в функции и делать с этим что-то
         // Но это может привести к дальнейшим проблемам с отладкой, поэтому делается так
         foreach ($body as $elem) {
+            $senderIndex = "Плательщик1";
+            $recieverIndex = "Получатель1";
             if ($header["ВерсияФормата"] == "1.01" || $header["ВерсияФормата"] == "1.03") {
                 $senderIndex = "Плательщик";
                 $recieverIndex = "Получатель";
-            } else {
-                $senderIndex = "Плательщик1";
-                $recieverIndex = "Получатель1";
             }
-            $kontragent_s = Kontragent::where("name_kontragent", "=", $elem[$senderIndex] ?? "Плательщик1")->first();
+
+            // Найти контрагента по ИНН
+            // Если не найден добавить и записать имя как основное
+            // Если найден проверить схожесть имен
+            // Если имена не сходятся добавить доп имя
+            $inn = $elem["ПлательщикИНН"];
+            $kontragent_s = Kontragent::where("inn_kontragent", "=", $inn)->first();
             if ($kontragent_s === null) {
                 $kontragent_s = new Kontragent;
                 $kontragent_s->name_kontragent = $elem[$senderIndex] ?? "Плательщик1";
+                $kontragent_s->inn_kontragent = $elem["ПлательщикИНН"];
                 $kontragent_s->save();
+            } else if ($kontragent_s->name_kontragent != $elem[$senderIndex] ?? "Плательщик1") {
+                $name_s = NameKontragent::where("name_kontragent", "=", $elem[$senderIndex] ?? "Плательщик1")->first();
+                if ($name_s === null && $kontragent_s->name_kontragent !== $elem[$senderIndex] ?? "Плательщик1") {
+                    $name_s = new NameKontragent();
+                    $name_s->name_kontragent = $elem[$senderIndex] ?? "Плательщик1";
+                    $name_s->NameDefault = 0;
+                    $kontragent_s->names()->save($name_s);
+                }
             }
-            $schet_s = $kontragent_s->INNs->where("inn_kontragent", "=", $elem["ПлательщикИНН"] )->first();
-            if ($schet_s === null) {
-                $schet_s = new INN_kontragent;
-                $schet_s->inn_kontragent = $elem["ПлательщикИНН"];
-                $kontragent_s->INNs()->save($schet_s);
-            }
-            $kontragent_r = Kontragent::where("name_kontragent", "=", $elem[$recieverIndex] ?? "Получатель1")->first();
+            $kontragent_r = Kontragent::where("inn_kontragent", "=", $elem["ПолучательИНН"])->first();
             if ($kontragent_r === null) {
                 $kontragent_r = new Kontragent;
                 $kontragent_r->name_kontragent = $elem[$recieverIndex] ?? "Получатель1";
+                $kontragent_r->inn_kontragent = $elem["ПолучательИНН"];
                 $kontragent_r->save();
+            } else if ($kontragent_s->name_kontragent != $elem[$recieverIndex] ?? "Получатель1") {
+                $name_r = NameKontragent::where("name_kontragent", "=", $elem[$recieverIndex] ?? "Получатель1")->first();
+                if ($name_r === null && $kontragent_r->name_kontragent !== $elem[$recieverIndex] ?? "Получатель1") {
+                    $name_r = new NameKontragent();
+                    $name_r->name_kontragent = $elem[$recieverIndex] ?? "Получатель1";
+                    $name_r->NameDefault = 0;
+                    $kontragent_r->names()->save($name_r);
+                }
             }
-            $schet_r = $kontragent_r->INNs->where("inn_kontragent", "=", $elem["ПолучательИНН"])->first();
-            if ($schet_r === null) {
-                $schet_r = new INN_kontragent;
-                $schet_r->inn_kontragent = $elem["ПолучательИНН"];
-                $kontragent_r->INNs()->save($schet_r);
-            }
-
             $compareDate = explode(".", $elem["Дата"]);
             $compareDate = "{$compareDate[2]}-{$compareDate[1]}-{$compareDate[0]}";
 
@@ -260,11 +272,11 @@ class XmlUploadController extends Controller
                 $plateglinc->osnovanie_user = NULL;
                 $plateglinc->id_kontragent = $kontragent_s->id;
                 $plateglinc->summ_plateg = $plateg_vipska->Summa;
-                $plateglinc->inn_kontragent = $kontragent_s->INNs()->first()->id;
+                $plateglinc->inn_kontragent = $kontragent_s->inn_kontragent;
                 $plateglinc->PlatelshchiKRasCHSchet = $plateg_vipska->PlatelshchickRasChshet;
-                $plateglinc->PlatelshchiKINN = $kontragent_s->INNs()->first()->inn_kontragent;
+                $plateglinc->PlatelshchiKINN = $kontragent_s->inn_kontragent;
                 $plateglinc->PoluchatelRasCHSchet = $plateg_vipska->PoluchatelRasChshet;
-                $plateglinc->PoluchatelINN = $kontragent_r->INNs()->first()->inn_kontragent;
+                $plateglinc->PoluchatelINN = $kontragent_r->inn_kontragent;
                 $plateglinc->Tip_plateg = "БезНал";
                 $plateglinc->Сheck_report = 2;
                 $plateglinc->data_report = date('Y-m-d h:i:s');
