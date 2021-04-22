@@ -148,11 +148,11 @@ class XmlUploadController extends Controller
                 $kontragent_s->name_kontragent = $elem[$senderIndex] ?? "Плательщик1";
                 $kontragent_s->inn_kontragent = $elem["ПлательщикИНН"];
                 $kontragent_s->save();
-            } else if ($kontragent_s->name_kontragent != $elem[$senderIndex] ?? "Плательщик1") {
-                $name_s = NameKontragent::where("name_kontragent", "=", $elem[$senderIndex] ?? "Плательщик1")->first();
+            } else if ($kontragent_s->name_kontragent != ($elem[$senderIndex] ?? $elem["Плательщик1"])) {
+                $name_s = NameKontragent::where("name_kontragent", "=", $elem[$senderIndex] ?? $elem["Плательщик1"])->first();
                 if ($name_s === null) {
                     $name_s = new NameKontragent();
-                    $name_s->name_kontragent = $elem[$senderIndex] ?? "Плательщик1";
+                    $name_s->name_kontragent = $elem[$senderIndex] ?? $elem["Плательщик1"];
                     $name_s->NameDefault = 0;
                     $kontragent_s->names()->save($name_s);
                 }
@@ -160,14 +160,14 @@ class XmlUploadController extends Controller
             $kontragent_r = Kontragent::where("inn_kontragent", "=", $elem["ПолучательИНН"])->first();
             if ($kontragent_r === null) {
                 $kontragent_r = new Kontragent;
-                $kontragent_r->name_kontragent = $elem[$recieverIndex] ?? "Получатель1";
+                $kontragent_r->name_kontragent = $elem[$recieverIndex] ?? $elem["Плательщик1"];
                 $kontragent_r->inn_kontragent = $elem["ПолучательИНН"];
                 $kontragent_r->save();
-            } else if ($kontragent_r->name_kontragent != $elem[$recieverIndex] ?? "Получатель1") {
-                $name_r = NameKontragent::where("name_kontragent", "=", $elem[$recieverIndex] ?? "Получатель1")->first();
+            } else if ($kontragent_r->name_kontragent != ($elem[$recieverIndex] ?? $elem["Получатель1"])) {
+                $name_r = NameKontragent::where("name_kontragent", "=", $elem[$recieverIndex] ?? $elem["Получатель1"])->first();
                 if ($name_r === null) {
                     $name_r = new NameKontragent();
-                    $name_r->name_kontragent = $elem[$recieverIndex] ?? "Получатель1";
+                    $name_r->name_kontragent = $elem[$recieverIndex] ?? $elem["Получатель1"];
                     $name_r->NameDefault = 0;
                     $kontragent_r->names()->save($name_r);
                 }
