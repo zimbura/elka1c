@@ -289,7 +289,7 @@ class XmlUploadController extends Controller
                 $ras_schet_r = RaschSchet::where("raschshet_kontragent", "=", $elem["ПолучательРасчСчет"])
                     ->where("RasChshetBik", "=", $elem["ПолучательБИК"])
                     ->first();
-                if ($ras_schet_r === null) {
+                if ($ras_schet_r === null && $elem["ПолучательРасчСчет"] != "") {
                     $ras_schet_r = new RaschSchet();
                     $ras_schet_r->raschshet_kontragent = $elem["ПолучательРасчСчет"];
                     $ras_schet_r->id_kontragent = $kontragent_r->id;
@@ -300,7 +300,7 @@ class XmlUploadController extends Controller
                 $ras_schet_s = RaschSchet::where("raschshet_kontragent", "=", $elem["ПлательщикРасчСчет"])
                     ->where("RasChshetBik", "=", $elem["ПлательщикБИК"])
                     ->first();
-                if ($ras_schet_s === null) {
+                if ($ras_schet_s === null && $elem["ПлательщикРасчСчет"] != "") {
                     $ras_schet_s = new RaschSchet();
                     $ras_schet_s->raschshet_kontragent = $elem["ПлательщикРасчСчет"];
                     $ras_schet_s->id_kontragent = $kontragent_s->id;
