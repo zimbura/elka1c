@@ -145,7 +145,7 @@ class XmlUploadController extends Controller
             $kontragent_s = Kontragent::where("inn_kontragent", "=", $inn)->first();
             if ($kontragent_s === null) {
                 $kontragent_s = new Kontragent;
-                $kontragent_s->name_kontragent = $elem[$senderIndex] ?? "Плательщик1";
+                $kontragent_s->name_kontragent = $elem[$senderIndex] ?? $elem["Плательщик1"];
                 $kontragent_s->inn_kontragent = $elem["ПлательщикИНН"];
                 $kontragent_s->save();
             } else if ($kontragent_s->name_kontragent != ($elem[$senderIndex] ?? $elem["Плательщик1"])) {
@@ -160,7 +160,7 @@ class XmlUploadController extends Controller
             $kontragent_r = Kontragent::where("inn_kontragent", "=", $elem["ПолучательИНН"])->first();
             if ($kontragent_r === null) {
                 $kontragent_r = new Kontragent;
-                $kontragent_r->name_kontragent = $elem[$recieverIndex] ?? $elem["Плательщик1"];
+                $kontragent_r->name_kontragent = $elem[$recieverIndex] ?? $elem["Получатель1"];
                 $kontragent_r->inn_kontragent = $elem["ПолучательИНН"];
                 $kontragent_r->save();
             } else if ($kontragent_r->name_kontragent != ($elem[$recieverIndex] ?? $elem["Получатель1"])) {
