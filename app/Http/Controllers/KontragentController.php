@@ -41,7 +41,7 @@ class KontragentController extends Controller
         $kontragent->forma_kontragent = $request->type ?? $kontragent->forma_kontragent;
         $kontragent->nalog_kontragent = $request->tax ?? $kontragent->nalog_kontragent;
         $kontragent->NoteKontragent = $request->note ?? $kontragent->NoteKontragent;
-        $inn = $kontragent->inn_kontragent;
+        $kontragent->inn_kontragent = $request->inn ?? $kontragent->inn_kontragent;
         $user = User::find($request->input("user"));
         if ($user !== NULL) {
             $kontragent->user()->dissociate();
