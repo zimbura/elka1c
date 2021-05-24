@@ -15,12 +15,20 @@ class CreateProektTable extends Migration
     {
         Schema::create('proekt', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("id_zakazhik_proekt");
-            $table->foreign("id_zakazhik_proekt")->references("id")->on("kontragent");
+            $table->unsignedBigInteger("idKontragent");
+            $table->foreign("idKontragent")->references("id")->on("kontragent");
+            $table->unsignedBigInteger("idKontragentMy");
+            $table->foreign("idKontragentMy")->references("id")->on("kontragent");
             $table->string("name_proekt", 200);
-            $table->string("opisanie_proekt", 500);
+            $table->string("opisanie_proekt");
             $table->double("summ_proekt_all");
-            $table->string("sotrudnik_proekt", 100);
+            $table->date("DataProekt");
+            $table->date("DataEndProekt");
+            $table->string("ContactProekt");
+            $table->unsignedBigInteger("idStatusProekt");
+            $table->foreign("idStatusProekt")->references("id")->on("status_proekt");
+            $table->unsignedBigInteger("CategoryProekt");
+            $table->foreign("CategoryProekt")->references("id")->on("category_proekt");
         });
     }
 

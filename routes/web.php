@@ -7,6 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\KontragentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\ProjectStatusController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [IndexController::class, "index"])->name("index");
-Route::get('/xml', [XmlUploadController::class, "index"])->name("xml");
+Route::get('/config', [XmlUploadController::class, "index"])->name("config");
 Route::post("/xmlupload", [XmlUploadController::class, "uploadfile"])->name("xmlupload");
 Route::post("/login", [LoginController::class, "login"])->name("login");
 Route::post("/changeRoles/{id}", [RolesController::class, "changeRoles"])->name("changerole");
@@ -33,3 +34,6 @@ Route::get("/users", [UserController::class, "index"])->name("users");
 Route::get("/user/{user}", [UserController::class, "show"])->name("userview");
 Route::post("/edit/user/{user}", [UserController::class, "edituser"])->name("useredit");
 Route::get("/payments", [PaymentsController::class, "index"])->name("payments");
+
+Route::post("/addstatus", [ProjectStatusController::class, "addstatus"])->name("addstatus");
+Route::post("/editstatus/{status}", [ProjectStatusController::class, "editstatus"])->name("editstatus");

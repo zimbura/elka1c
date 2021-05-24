@@ -6,7 +6,7 @@
 <ul>
     <li><a href="{{ route('index') }}">Домой</a></li>
     @role("admin", "director")
-    <li><a href="{{ route('xml') }}">Загрузка xml</a></li>
+    <li><a href="{{ route('config') }}">Загрузка xml</a></li>
     @endrole
     @role("admin", "director", "accountant")
     <li><a href="{{ route('kontragents') }}">Все контрагенты</a></li>

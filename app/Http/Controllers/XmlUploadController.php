@@ -12,6 +12,7 @@ use App\Models\PlategLinc;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\PlategVipiskaAll;
+use App\Models\ProjectStatus;
 use App\Models\RaschSchet;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,7 +23,8 @@ class XmlUploadController extends Controller
         if (!auth()->check() || !auth()->user()->hasRole("admin", "director")) {
             abort(404);
         }
-        return view("xmlupload");
+        $projectStatuses = ProjectStatus::all();
+        return view("config")->with("projectStatuses", $projectStatuses);
     }
 
     public function uploadfile(Request $request)
