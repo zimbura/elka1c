@@ -18,11 +18,20 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->back();
+            return redirect("/");
         }
 
-        return back()->withErrors([
+        return redirect()->back()->withErrors([
             'email' => 'Данные для входа не верны',
         ]);
     }
+
+    public function page() {
+        return view("pages.login");
+    }
+
+    public function logout(Request $request) {
+        Auth::logout();
+        return redirect('/loginpage');
+      }
 }

@@ -20,11 +20,11 @@ class XmlUploadController extends Controller
 {
     public function index()
     {
-        if (!auth()->check() || !auth()->user()->hasRole("admin", "director")) {
-            abort(404);
-        }
+        // if (!auth()->check() || !auth()->user()->hasRole("admin", "director")) {
+        //     abort(404);
+        // }
         $projectStatuses = ProjectStatus::all();
-        return view("config")->with("projectStatuses", $projectStatuses);
+        return view("pages.config")->with("projectStatuses", $projectStatuses);
     }
 
     public function uploadfile(Request $request)
